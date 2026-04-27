@@ -9,6 +9,7 @@ class RequestProduct extends Model{
     protected $table = 'requestProducts';
 
     protected $fillable = [
+        'name',
         'request_id',
         'product_id',
         'requested_quantity',
@@ -17,7 +18,7 @@ class RequestProduct extends Model{
 
     public function request()
     {
-        return $this->belongsTo(Request::class);
+        return $this->belongsTo(RequestModel::class);
     }
 
     public function product()
