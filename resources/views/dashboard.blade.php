@@ -1,17 +1,19 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
-        </div>
+@section('content')
+
+    <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
+
+    <div class="grid grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded shadow">12 Requisições</div>
+        <div class="bg-white p-4 rounded shadow">08 Pendentes</div>
+        <div class="bg-white p-4 rounded shadow">05 Aprovadas</div>
+        <div class="bg-white p-4 rounded shadow text-red-500">236 Itens</div>
     </div>
-</x-app-layout>
+
+    <div class="bg-white mt-6 p-6 rounded shadow">
+        <h2 class="mb-4 font-bold">Consumo Mensal</h2>
+        <div class="h-40 bg-gray-200"></div>
+    </div>
+
+@endsection

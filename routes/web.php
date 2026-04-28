@@ -1,62 +1,30 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\auth\AuthenticatedSessionController;
 
-/*
-|--------------------------------------------------------------------------
-| Redirecionamento inicial
-|--------------------------------------------------------------------------
-*/
-Route::get('/', fn () => redirect()->route('login'));
+// LOGIN (raiz)
+Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
+Route::post('/', [AuthenticatedSessionController::class, 'store']);
 
-/*
-|--------------------------------------------------------------------------
-| Rotas AUTENTICADAS
-|--------------------------------------------------------------------------
-*/
-Route::middleware(['auth', 'verified'])->group(function () {
+// LOGOUT
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-    // Dashboard
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
+// REGISTER
+Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+Route::post('/register', [RegisteredUserController::class, 'store']);
 
-    /*
-    |--------------------------------------------------------------------------
-    | Materiais (Products)
-    |--------------------------------------------------------------------------
-    */
-    Route::resource('product', ProductController::class);
+Route::get('/products', [ProductController::class, 'index'])->name('products');
+Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
+Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+Route::get('/products/index', [ProductController::class, 'create'])->name('products.index');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Requisições
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/requests/create', function () {
-        return view('request');
-    })->name('requests.create');
 
-    Route::post('/requests', [RequestController::class, 'store'])
-        ->name('requests.store');
-
-    Route::get('/requests/{id}', [RequestController::class, 'show'])
-        ->name('requests.show');
-
-    /*
-    |--------------------------------------------------------------------------
-    | Perfil
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-/*
-|--------------------------------------------------------------------------
-| Auth (Laravel Breeze)
-|--------------------------------------------------------------------------
-*/
-require __DIR__ . '/auth.php';
+// DASHBOARD (protegido)
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware('auth')->name('dashboard');
